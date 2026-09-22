@@ -12,7 +12,6 @@ def crearEntrenador(tupla):
     vida = random.randint(500, 900)
 
     nuevo = (entrenador, pokemon, ataque, vida)
-
     tupla.append(nuevo)
 
     print("Entrenador y Pokemon creados.")
@@ -23,7 +22,6 @@ def crearEntrenador(tupla):
 def ordenBurbuja(lis):
     for i in range(1, len(lis)):
         for j in range(len(lis)-1):
-
             if lis[j][2] > lis[j+1][2]:
                 lis[j], lis[j+1] = lis[j+1], lis[j]
 
@@ -31,11 +29,6 @@ def ordenBurbuja(lis):
 
 
 def listaEntrenador(tupla):
-
-    if len(tupla) == 0:
-        print("No hay entrenadores registrados.")
-        return
-
     ordenBurbuja(tupla)
 
     print("===== LISTA DE ENTRENADORES =====")
@@ -44,20 +37,16 @@ def listaEntrenador(tupla):
 
     for item in tupla:
         print(f"{correlativo}. Entrenador: {item[0]} - Pokemon: {item[1]} - Ataque: {item[2]} - Vida: {item[3]}")
-
         correlativo += 1
 
 
 def ordenSeleccion(lista):
-
     n = len(lista)
 
     for manoIzq in range(n):
-
         ind_min_val = manoIzq
 
         for vista in range(manoIzq + 1, n):
-
             if lista[vista][3] < lista[ind_min_val][3]:
                 ind_min_val = vista
 
@@ -67,12 +56,10 @@ def ordenSeleccion(lista):
 
 
 def busqueda_binaria(array, vida):
-
     menor = 0
     mayor = len(array) - 1
 
     for data in range(len(array)):
-
         medio = (menor + mayor) // 2
 
         if array[medio][3] == vida:
@@ -97,11 +84,6 @@ def busqueda_binaria(array, vida):
 
 
 def borraPorPokemon(tupla):
-
-    if len(tupla) == 0:
-        print("No hay Pokemon registrados.")
-        return
-
     ordenSeleccion(tupla)
 
     print("Ingrese la vida del Pokemon a buscar:")
@@ -110,24 +92,17 @@ def borraPorPokemon(tupla):
     busqueda = busqueda_binaria(tupla, vida)
 
     if busqueda == -1:
-
         print(f"No existe un Pokemon con vida {vida}.")
 
     else:
-
         eliminado = tupla[busqueda]
 
-        tupla.pop(busqueda)
+        tupla.remove(eliminado)
 
         print(f"Se elimino al entrenador {eliminado[0]} y su Pokemon {eliminado[1]}.")
 
 
 def peleaPokemon(lista):
-
-    if len(lista) < 2:
-        print("Debe haber por lo menos 2 Pokemon para realizar una pelea.")
-        return
-
     listaEntrenador(lista)
 
     print("Ingrese el numero del primer Pokemon:")
@@ -135,16 +110,6 @@ def peleaPokemon(lista):
 
     print("Ingrese el numero del segundo Pokemon:")
     numero2 = int(input())
-
-    if numero1 < 1 or numero1 > len(lista) or numero2 < 1 or numero2 > len(lista):
-
-        print("Numero de Pokemon incorrecto.")
-        return
-
-    if numero1 == numero2:
-
-        print("Debe seleccionar 2 Pokemon diferentes.")
-        return
 
     indice1 = numero1 - 1
     indice2 = numero2 - 1
@@ -161,63 +126,35 @@ def peleaPokemon(lista):
     vida1 = pokemon1[3] - ataque2
     vida2 = pokemon2[3] - ataque1
 
-    print(f"{pokemon1[1]} ataca con {ataque1}")
-    print(f"{pokemon2[1]} ataca con {ataque2}")
+    print(f"{pokemon1[1]} realiza un ataque de {ataque1}")
+    print(f"{pokemon2[1]} realiza un ataque de {ataque2}")
 
-    print(f"Vida final de {pokemon1[1]}: {vida1}")
-    print(f"Vida final de {pokemon2[1]}: {vida2}")
+    print(f"Vida de {pokemon1[1]}: {vida1}")
+    print(f"Vida de {pokemon2[1]}: {vida2}")
 
     if vida1 <= 0 and vida2 <= 0:
+        lista.remove(pokemon1)
+        lista.remove(pokemon2)
 
-        print("Ambos Pokemon quedaron sin vida. Ambos pierden.")
-
-        if indice1 > indice2:
-
-            lista.pop(indice1)
-            lista.pop(indice2)
-
-        else:
-
-            lista.pop(indice2)
-            lista.pop(indice1)
+        print("Ambos Pokemon quedaron sin vida. Ambos perdieron.")
 
     elif vida1 == vida2:
+        lista.remove(pokemon1)
+        lista.remove(pokemon2)
 
-        print("La pelea termino empatada. Ambos pierden.")
-
-        if indice1 > indice2:
-
-            lista.pop(indice1)
-            lista.pop(indice2)
-
-        else:
-
-            lista.pop(indice2)
-            lista.pop(indice1)
+        print("Ambos Pokemon empataron. Ambos perdieron.")
 
     elif vida1 > vida2:
+        lista[indice1] = (pokemon1[0], pokemon1[1], pokemon1[2], vida1)
 
-        lista[indice1] = (
-            pokemon1[0],
-            pokemon1[1],
-            pokemon1[2],
-            vida1
-        )
-
-        lista.pop(indice2)
+        lista.remove(pokemon2)
 
         print(f"Ganador: {pokemon1[0]} con su Pokemon {pokemon1[1]}")
 
     else:
+        lista[indice2] = (pokemon2[0], pokemon2[1], pokemon2[2], vida2)
 
-        lista[indice2] = (
-            pokemon2[0],
-            pokemon2[1],
-            pokemon2[2],
-            vida2
-        )
-
-        lista.pop(indice1)
+        lista.remove(pokemon1)
 
         print(f"Ganador: {pokemon2[0]} con su Pokemon {pokemon2[1]}")
 
@@ -229,7 +166,7 @@ opcion = ""
 while opcion != "5":
 
     print("================================")
-    print("========== POKEMON =============")
+    print("============ POKEMON ===========")
     print("================================")
     print("1. Crear Entrenador")
     print("2. Listar Entrenadores")
@@ -254,8 +191,8 @@ while opcion != "5":
             peleaPokemon(lista)
 
         case "5":
-            print("Fin del programa.")
+            print("Saliendo del programa")
             break
 
         case _:
-            print("Opcion invalida.")
+            print("Opcion invalida")
